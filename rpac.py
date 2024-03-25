@@ -123,7 +123,6 @@ def main():
     
     logging.info("Waiting for card to be presented")
     wait_for_pin_state_changes(readers_by_name, devices_by_name)
-    # NOT REACHED
 
 if __name__ == "__main__":
     main()
