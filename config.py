@@ -6,7 +6,7 @@ import re
 
 # Local Packages
 from controlled_device import ControlledDevice
-from strong_link_sl030_reader import StrongLinkSl030Reader
+from rc522 import RC522CardReader
 
 def parse_config_options(config_filename):
     if not os.path.exists(config_filename):
@@ -44,8 +44,8 @@ def parse_config_options(config_filename):
             # I've decided to hard-code the list of supported object types
             # for sanity checking here, rather than 'eval'ing the supplied
             # name
-            if config.get(o, 'reader type') == 'StrongLinkSl030Reader':
-                r = StrongLinkSl030Reader(config.items(o))
+            if config.get(o, 'reader type') == 'RC522CardReader':
+                r = RC522CardReader(config.items(o))
             else:
                 assert False, \
                         "Unsupported Reader type - '%s'" \
@@ -58,7 +58,7 @@ def parse_config_options(config_filename):
             readers_by_name[ m.group(2) ] = r
 
         elif m.group(1) == 'Device':
-            # Devices are the 'things' we control (doors, machinery, etc).
+            # Devices are the 'things' we control (doors, cameras, etc).
             
             # Build a new Device from the parameters we've been supplied
             # and store it in the 'devices_by_name' has
