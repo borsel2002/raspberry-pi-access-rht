@@ -11,40 +11,24 @@ from quick2wire import gpio
 # Class - ControlledDevice
 ###############################################################################
 
-# A 'Controlled Device' is some sort of hardware that we are responsible for
-# access to the door
+
 class ControlledDevice:
     name = 'NOT DEFINED'
     
-    # To enable a device, some hardware pins may need to have their pins set
-    # 'low', while on some other devices, the pins may need to be set 'high'.
-    #
-    # Similarly, on a device being 'disabled', the same is true.
-    #
-    pin_objects = {}                # Objects that are used for interfacing with HW
+    pin_objects = {}
     enable_set_pins_low = []
     enable_set_pins_high = []
     disable_set_pins_low = []
     disable_set_pins_high = []
 
-    # Access to a controlled device is based on the card presented,
-    # with a list of 'allowed cards' stored in a configuration file. The exact
-    # filename used is supplied in the config file
     acl_filename = None
 
-    # The 'authorised cards' are read into this in-memory array. Since the
-    # use-case for the rpac system is less than 1000 cards, we read this
-    # into memory
     authorised_cards = []
 
-    # This device is instantiated and configured based on a config file. The
-    # object is passed a 'configparser' fragment, and needs to set the
-    # appropriate parameters
     def  __init__(self, config, acl_path):
         """Device Constructor"""
         self.acl_path = acl_path
 
-        # Process configuration file fragment
         for o, a in config:
             if o == 'enable set pins low':
                 self.enable_set_pins_low = self.parse_pin_parameters(a)
@@ -59,9 +43,6 @@ class ControlledDevice:
             else:
                 assert False, "Unsupported parameter '%s' for Device" % o
 
-        # Check that everything makes sense in the supplied config
-        # file, so that if someone leaves out a critical parameter or
-        # similar, we raise an appropriate error
         if not (                                        \
                    len(self.enable_set_pins_low)   > 0  \
                 or len(self.enable_set_pins_high)  > 0  \
@@ -78,9 +59,6 @@ class ControlledDevice:
             assert False, "ACL filename not set"
 
 
-    # The pins originally specified in the config file are text, and need
-    # to be converted to numerics. There can also be more than one per
-    # config file line, so clean things up and store them in an array
     def parse_pin_parameters(self, pins_as_text):
         if re.search('[^0-9\ ]+', pins_as_text):
              assert False, "Pins parameters supplied is not all-numeric," \
@@ -112,8 +90,6 @@ class ControlledDevice:
             logging.info("Card is NOT authorised");
             return self.disable()
 
-
-    # STATE CHANGES: enable or disable this device
     def enable(self):
         self._set_pins(0, self.enable_set_pins_low)
         self._set_pins(1, self.enable_set_pins_high)

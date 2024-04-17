@@ -2,10 +2,10 @@
 
 This system was specifically built to be used in a minimal-security
 environment (a shared communal space). It was also specifically designed so as
-to allow the use of existing London Underground 'Oyster Cards' so as to avoid
+to allow the use of existing IZTECH 'Student Cards' so as to avoid
 the purchase of new RFID cards by the user.
 
-Further, it was also designed to operate without interfering with the normal
+Furthermore, it was also designed to operate without interfering with the normal
 operation of those cards. If this were not the case the contents of the cards
 could be overwritten by the user to ensure secure operation.
 
@@ -20,9 +20,9 @@ where security is important.
 # Installation
 
 This code requires a Raspberry Pi to operate. It may work on other similar
-hardware supported by the Quick2Wire libraries with minor modification.
+hardware supported by the GPIO libraries with minor modification.
 
-1) Install required programs as per 'SETUP.txt'
+1) Install required programs as per 'SETUP.md'
 
 2) Edit rapc.conf and configure the pin assignments for the
     card reader and relay.
